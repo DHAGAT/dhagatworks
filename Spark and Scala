@@ -1,0 +1,70 @@
+Consider the following array.     
+{10,21,90,34,40,98,21,44,59,21,90,34,29,19, 21,90,34,29,49,78 } . Create a new RDD for each of the following assignments. 
+
+1.	For the above array,
+a)	Create a RDD for the above array. 
+b)	Display the array 
+c)	Display the first element of the array 
+
+scala> val rdd1 = sc.parallelize(List(10,21,90,34,40,98,21,44,59,21,90,34,29,19, 21,90,34,29,49,78))
+rdd1: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at <console>:27
+scala> rdd1.collect
+res0: Array[Int] = Array(10, 21, 90, 34, 40, 98, 21, 44, 59, 21, 90, 34, 29, 19, 21, 90, 34, 29, 49, 78)
+scala> rdd1.collect
+res1: Array[Int] = Array(10, 21, 90, 34, 40, 98, 21, 44, 59, 21, 90, 34, 29, 19, 21, 90, 34, 29, 49, 78)
+scala> rdd1.f
+filter         	filterWith     	first          	flatMap        	flatMapWith    	fold           	foreach        	foreachPartition  
+foreachWith    	
+scala> rdd1.first
+res2: Int = 10
+
+
+
+2.	Consider the above array
+a)	Display the sorted output (ascending and descending) through an RDD. 
+b)	Display the distinct elements of the array using an RDD
+c)	Display distinct elements without using a new RDD.
+
+
+scala>  rdd1.sortBy(x=>x,true).collect
+res8: Array[Int] = Array(10, 19, 21, 21, 21, 21, 29, 29, 34, 34, 34, 40, 44, 49, 59, 78, 90, 90, 90, 98)
+scala>  rdd1.sortBy(x=>x,false).collect
+res9: Array[Int] = Array(98, 90, 90, 90, 78, 59, 49, 44, 40, 34, 34, 34, 29, 29, 21, 21, 21, 21, 19, 10)
+scala>
+
+scala> rdd1.distinct.collect
+res5: Array[Int] = Array(34, 98, 40, 90, 44, 78, 10, 19, 21, 29, 59, 49)
+scala> val rdd2 = rdd1.dostinct
+<console>:29: error: value dostinct is not a member of org.apache.spark.rdd.RDD[Int]
+     	val rdd2 = rdd1.dostinct
+                     	^
+scala> val rdd2 = rdd1.distinct
+rdd2: org.apache.spark.rdd.RDD[Int] = MapPartitionsRDD[6] at distinct at <console>:29
+scala> rdd2.collect
+res6: Array[Int] = Array(34, 98, 40, 90, 44, 78, 10, 19, 21, 29, 59, 49)
+
+
+3.	Consider the above array 
+a)	Display maximum and minimum of given array using RDD.
+b)	Display top 5 list elements using RDD
+c)	Combine above array with a new array { 30,35,45,60,75,85} and display output. 
+d)	Provide the sum of the array elements using reduce with distinct values.
+e)	Provide the sum of the array elements using reduce.
+
+scala> rdd1.top(5)
+res12: Array[Int] = Array(98, 90, 90, 90, 78)
+scala> val rdd3 = sc.parallelize(List(30,35,45,60,75,85))
+rdd3: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[23] at parallelize at <console>:27
+scala> rdd1.union(rdd3)
+res13: org.apache.spark.rdd.RDD[Int] = UnionRDD[24] at union at <console>:32
+scala> rdd1.union(rdd3).collect
+res14: Array[Int] = Array(10, 21, 90, 34, 40, 98, 21, 44, 59, 21, 90, 34, 29, 19, 21, 90, 34, 29, 49, 78, 30, 35, 45, 60, 75, 85)
+scala> rdd1.collect
+res15: Array[Int] = Array(10, 21, 90, 34, 40, 98, 21, 44, 59, 21, 90, 34, 29, 19, 21, 90, 34, 29, 49, 78)
+scala> rdd3.collect
+res16: Array[Int] = Array(30, 35, 45, 60, 75, 85)
+scala> rdddistinct.reduce((x,y)=>x+y)
+res22: Int = 571
+scala> rdd1.collect
+res23: Array[Int] = Array(10, 21, 90, 34, 40, 98, 21, 44, 59, 21, 90, 34, 29, 19, 21, 90, 34, 29, 49, 78)
+scala> rdd1.reduce((x,y)=>x+y)
